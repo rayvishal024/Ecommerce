@@ -2,19 +2,34 @@ import Joi from "joi";
 
 class BaseDTO {
 
-     static Schema = Joi.object({})
-    
-     static Validate(data) {
-          const { error, value } = this.Schema.validate(data, {
-               abortEarly: false,
-               stripUnknown: true,
-          });
-          
-            if (error) {
-                 const errors = error.details.map((d) => d.message);
-                  return { errors, value: null }
-            }
-            return {errors: null, value };
+     static Schema = Joi.object({});
 
+     static Validate(data) {
+          try {
+               const { error, value } = this.Schema.validate(data, {
+                    abortEarly: false,
+                    stripUnknown: true,
+               });
+
+               if (error) {
+                    const errors = error.details.map((d) => ({
+                         field: d.path.join("."),
+                         message: d.message,
+                    }));
+
+                    return { success: false, errors, value: null };
+               }
+
+               return { success: true, errors: null, value };
+
+          } catch (err) {
+               return {
+                    success: false,
+                    errors: ["Validation failed unexpectedly"],
+                    value: null,
+               };
+          }
      }
 }
+
+export default BaseDTO;

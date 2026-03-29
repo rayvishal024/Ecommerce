@@ -1,7 +1,7 @@
 class ApiResponse {
 
      // Success response
-     static ok(data, message = 'Success', data = null) {
+     static ok(res, message = 'Success', data = null) {
           return res.status(200).json({
                success: true,
                message,
@@ -10,7 +10,7 @@ class ApiResponse {
      }
 
      // created response
-     static created(data, message = 'Resource created successfully', data = null) {
+     static created(res, message = 'Resource created successfully', data = null) {
           return res.status(201).json({
                success: true,
                message,
@@ -23,4 +23,15 @@ class ApiResponse {
           return res.status(204).send()
      }
 
+     // Bad request response
+     static badRequest(res, message = 'Bad request', data = null) {
+          return res.status(400).json({
+               success: false,
+               message,
+               data,
+          });
+     }
+
 }
+
+export default ApiResponse;
