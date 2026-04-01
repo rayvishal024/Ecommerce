@@ -6,10 +6,7 @@ class BaseDTO {
 
      static Validate(data) {
           try {
-               const { error, value } = this.Schema.validate(data, {
-                    abortEarly: false,
-                    stripUnknown: true,
-               });
+               const { error, value } = this.Schema.validate(data);
 
                if (error) {
                     const errors = error.details.map((d) => ({

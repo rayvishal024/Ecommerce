@@ -1,6 +1,9 @@
 import { generateAccessToken, generateRefreshToken, generateResetToken, verifyRefreshToken } from "../../common/utils/jwt.utils.js";
 import User from "./auth.model.js";
 import ApiError from "../../common/utils/api-error.js";
+import crypto from 'crypto'
+
+
 // import { sendVerificationEmail } from "../../common/config/email.js";
 
 // hash token 
@@ -44,24 +47,25 @@ export const register = async ({ name, email, password , role}) => {
 // login service
 export const login = async ({ email, password }) => {
      // find user
+    
      const user = await User.findOne({ email }).select("+password");
-
+     console.log(user)
      // user not exist
      if (!user) {
           throw ApiError.unauthorized("Invalid email or password")
      }
-
+       console.log(user)
      // check password
-     const isCorrectPassword = await User.comparePassword(password);
+     const isCorrectPassword = await user.comparePassword(password);
 
      if (!isCorrectPassword) {
           throw ApiError.unauthorized("Invalid email or password");
      }
 
-     // check verifiy user or not
-     if (!user.isVerified) {
-          throw ApiError.forbidden("Please verify your email before loggin");
-     }
+     // check verifiy user or not (comment while email feature not working)
+     // if (!user.isVerified) {
+     //      throw ApiError.forbidden("Please verify your email before loggin");
+     // }
           
      // generate access and refresh token
      const accessToken = generateAccessToken({id : user._id, role : user.role});

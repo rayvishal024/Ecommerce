@@ -3,7 +3,7 @@ import ApiResponse from "../../common/utils/api-response.js";
 
 // register controller
 export const register = async (req, res) => {
-     console.log("FINAL BODY:", req.body);
+   
      // Call the register service
      const user = await service.register(req.body);
 
